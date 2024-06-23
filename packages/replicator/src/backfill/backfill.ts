@@ -13,6 +13,7 @@ import Redis from "ioredis";
 import { createWorker } from "./worker";
 import dayjs from "dayjs";
 
+// TYPE ORM ??
 const db = Knex({
   client: "pg",
   connection: POSTGRES_URL,
@@ -23,13 +24,15 @@ const db = Knex({
 });
 
 export const backfill = async (hub: HubRpcClient, redis: Redis) => {
+  // RUN DB MOGRATIONS
   await db.migrate.latest();
 
   const queue = getQueue(redis, BACKFILL_QEUE_NAME);
   await cleanupQueue(queue);
-
+  // GET A START AND END INTEGER TO CREATE AN ARRAY OF INTEGERS FOR THE BACKFILL
   const minFid = await getMinFid(db);
   const maxFid = await getMaxFid(hub);
+  // @TO-DO:  STANDARDIZE LOGGING AND INSTRUMENTATION
   console.log(`Starting backfill between ${minFid} and ${maxFid} fids`);
 
   console.log("Prepearing queue");

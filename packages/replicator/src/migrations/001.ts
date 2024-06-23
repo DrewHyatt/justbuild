@@ -53,6 +53,13 @@ export async function up(knex: Knex): Promise<void> {
     t.text("value");
   });
 
+  // LINKS
+  // STORAGE LIMITS
+  // VERIFICATIONS
+  // USER NAME PROOFS
+  // ON CHAIN EVENTS
+  // ON CHAIN SIGNERS
+
   await knex.raw(`
     create index cast_hash_idx on casts(hash);
     create index casts_pk_index on casts(fid,hash);

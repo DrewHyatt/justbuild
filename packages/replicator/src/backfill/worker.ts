@@ -16,6 +16,7 @@ export const createWorker = (
   const worker = new Worker(
     BACKFILL_QEUE_NAME,
     async (job: Job) => {
+      console.log(`Processing job ${job.id}`);
       const fids = job.data.fids as number[];
       const promises = fids.map(async (fid) => {
         await Promise.all(migrateAllDataForFid(hub, db, fid));

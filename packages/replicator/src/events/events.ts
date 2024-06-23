@@ -136,6 +136,7 @@ const createEventsWorker = (redis: Redis) =>
 const decodeEvents = (events: unknown[]) =>
   events.map((b) => HubEvent.fromJSON(b));
 
+// WHAT ADDITIONS DO WE NEED TO ADD HERE AND DO WE HAVE INTERFACES FOR ALL THE DATA STRUCTURES?
 const convertEventsToPg = (events: HubEvent[]) => {
   castsToAdd = [];
   castsToRemove = [];

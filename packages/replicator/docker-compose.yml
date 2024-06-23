@@ -16,22 +16,38 @@ services:
     networks:
       - hub-network
 
+  postgres:
+    image: postgres:13-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: replicator
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - hub-network
+
   replicator:
     build: .
     container_name: replicator
     command: npm start
     environment:
-      - POSTGRES_URL=postgres://postgres:postgres@host.docker.internal:5432/replicator
-      - POSTGRES_MAX_POOL=100
-      - HUB_HOST=hubble:2283
+      - POSTGRES_URL=postgres://postgres:postgres@postgres:5432/replicator
+      - POSTGRES_MAX_POOL=50
+      - HUB_HOST=api.farcasthub.com:2283
       - REDIS_URL=redis:6379
     depends_on:
       - redis
+      - postgres
     networks:
       - hub-network
 
 volumes:
   redis-data:
+  postgres-data:
 
 networks:
   hub-network:

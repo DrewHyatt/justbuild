@@ -69,6 +69,7 @@ export const moveAllByFidToPg = async (
 ) => {
   for await (const messages of getAllByFid(getByFid, fid)) {
     const batches = chunk(messages.map(converter), 1000);
+    console.log(batches[1]);
     const promises = batches.map(async (batch) => {
       try {
         await db(table).insert(batch).onConflict(onConflict).ignore();
